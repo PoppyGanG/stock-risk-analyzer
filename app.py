@@ -13,6 +13,10 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+@app.route('/mining-dashboard')
+def mining_dashboard():
+    return render_template('mining_dashboard.html')
+
 @app.route('/analyze', methods=['POST'])
 def analyze():
     ticker = request.form['ticker'].upper()

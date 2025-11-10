@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CommodAI-Tee: Mining Analysis Dashboard</title>
+    <!-- React and ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel Standalone for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .nav-link {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: #ffffff;
+            color: #1a237e;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+        .nav-link:hover {
+            background-color: #f0f2f5;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="nav-link">← Back to Stock Analyzer</a>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Dashboard Component ---
+        // This component acts as the main application, integrating all
+        // specialized components (Portfolio, Market, ESG, News) into one UI.
+
+        function CommadAiTeeDashboard() {
+            // === STATE MANAGEMENT ===
+            // Simulating state for data that would be fetched from your APIs
+
+            // Market Data (from ALPHA_VANTAGE, METALS_APIs)
+            const [marketData, setMarketData] = useState(null);
+
+            // Portfolio Data (Your 88 companies)
+            const [portfolio, setPortfolio] = useState(null);
+
+            // ESG & Compliance Data (from REGULATORY_APIs like EPA_ECHO)
+            const [complianceData, setComplianceData] = useState(null);
+
+            // News & Events (from provided intel)
+            const [newsFeed, setNewsFeed] = useState([]);
+            const [eventCalendar, setEventCalendar] = useState([]);
+
+            // User query for me (CommodAI-Tee)
+            const [query, setQuery] = useState('');
+            const [chatResponse, setChatResponse] = useState('');
+
+            // === MOCK API DATA FETCHING ===
+            // In a real application, these 'useEffect' hooks would make live
+            // requests to your configured API endpoints (Alpha Vantage, EPA ECHO, etc.)
+
+            // 1. Fetch Core Data on Load
+            useEffect(() => {
+                // Simulate fetching data from your API configurations
+
+                // Fetch Market Data (Price Triggers)
+                setMarketData({
+                    gold: { price: 2045.50, change: "+1.2%", alert: 'high-trigger' },
+                    copper: { price: 4.85, change: "+0.5%", alert: 'high-trigger' },
+                    silver: { price: 30.10, change: "-0.2%", alert: 'monitoring' },
+                    lithium: { price: 13500, change: "+1.0%", alert: 'monitoring' },
+                });
+
+                // Fetch Portfolio Data (Sample from your 88 companies)
+                setPortfolio([
+                    { id: 1, ticker: 'DAK', name: 'Dakota Gold', region: 'USA', price: 4.02, change: "+2.1%", compliance: 'OK' },
+                    { id: 2, ticker: 'NCU', name: 'Nevada Copper', region: 'USA', price: 0.45, change: "-1.5%", compliance: 'WARN' },
+                    { id: 3, ticker: 'LAC', name: 'Lithium Americas', region: 'USA', price: 18.70, change: "+3.0%", compliance: 'OK' },
+                    { id: 4, ticker: 'RIV', name: 'Revival Gold', region: 'Canada', price: 0.68, change: "+0.5%", compliance: 'OK' },
+                    { id: 5, ticker: 'IVN', name: 'Ivanhoe Mines', region: 'Africa', price: 12.50, change: "+1.8%", compliance: 'OK' },
+                ]);
+
+                // Fetch ESG/Compliance Data (Simulating EPA_ECHO alerts)
+                setComplianceData([
+                    { id: 1, company: 'Nevada Copper', type: 'NPDES', status: 'WARN', details: 'Quarterly discharge report pending (Q4)', deadline: '2025-12-31' },
+                    { id: 2, company: 'Highland Copper', type: 'SWPPP', status: 'OK', details: 'Annual inspection complete', deadline: 'N/A' },
+                    { id: 3, company: 'Portfolio-Wide', type: 'TRI/Tier II', status: 'ALERT', details: 'Annual reporting deadline approaching', deadline: '2026-03-01' },
+                ]);
+
+                // Load News & Calendar (From your provided intel)
+                setNewsFeed([
+                    { id: 1, headline: 'Ambler Access Approved for Alaska', source: 'Internal Intel' },
+                    { id: 2, headline: 'Vedanta Resources Launches CopperTech', source: 'Internal Intel' },
+                    { id: 3, headline: 'Final 2025 List of Critical Minerals Adds Copper, Met Coal', source: 'Internal Intel' },
+                ]);
+
+                setEventCalendar([
+                    { id: 1, name: 'Resourcing Tomorrow', date: 'Dec 2-4, 2025', location: 'London, UK' },
+                    { id: 2, name: 'AEMA Annual Conference', date: 'Dec 7-12, 2025', location: 'Reno, NV' },
+                    { id: 3, name: 'Mining Indaba', date: 'Feb 9-12, 2026', location: 'Cape Town, SA' },
+                ]);
+
+            }, []);
+
+            // === HANDLER FUNCTIONS ===
+
+            // Simulate querying me (CommodAI-Tee)
+            const handleQuerySubmit = (e) => {
+                e.preventDefault();
+                // Simulate a response based on my core competencies
+                let response = `Analyzing query: "${query}"... \n\n`;
+                if (query.toLowerCase().includes('aisc')) {
+                    response += `Query recognized: Technical Analysis. Based on Q3 data, the portfolio average AISC for gold producers is $1,510/oz, within your benchmarked $1,400-$1,900/oz range. Dakota Gold reports an AISC of $1,425/oz.`;
+                } else if (query.toLowerCase().includes('npdes')) {
+                    response += `Query recognized: ESG Compliance. I show one pending NPDES quarterly report for Nevada Copper (due 2025-12-31). All other U.S. portfolio assets are current on water discharge reporting.`;
+                } else {
+                    response += `Query recognized. I am processing your request based on my technical, financial, and ESG compliance frameworks.`;
+                }
+                setChatResponse(response);
+            };
+
+            // === STYLING (CSS-in-JS) ===
+            // Basic styling to create a dashboard layout
+            const styles = {
+                dashboard: { fontFamily: 'Arial, sans-serif', backgroundColor: '#f0f2f5', display: 'flex', flexDirection: 'column', height: '100vh' },
+                header: { backgroundColor: '#1a237e', color: 'white', padding: '10px 20px', fontSize: '24px', fontWeight: 'bold' },
+                main: { display: 'flex', flex: 1, padding: '10px', overflow: 'hidden' },
+                leftColumn: { flex: 3, display: 'flex', flexDirection: 'column', paddingRight: '10px' },
+                rightColumn: { flex: 1, display: 'flex', flexDirection: 'column' },
+                widget: { backgroundColor: '#ffffff', border: '1px solid #ddd', borderRadius: '8px', padding: '15px', marginBottom: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
+                widgetTitle: { fontSize: '18px', fontWeight: 'bold', borderBottom: '2px solid #1a237e', paddingBottom: '5px', marginBottom: '10px' },
+                table: { width: '100%', borderCollapse: 'collapse' },
+                th: { border: '1px solid #ddd', padding: '8px', backgroundColor: '#f4f4f4', textAlign: 'left' },
+                td: { border: '1px solid #ddd', padding: '8px' },
+                listItem: { padding: '5px 0', borderBottom: '1px solid #eee' },
+                queryBox: { display: 'flex', flexDirection: 'column' },
+                queryInput: { padding: '8px', border: '1px solid #ccc', borderRadius: '4px', marginBottom: '5px' },
+                queryButton: { padding: '8px', backgroundColor: '#1a237e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+                queryResponse: { marginTop: '10px', backgroundColor: '#f9f9f9', border: '1px solid #eee', padding: '10px', whiteSpace: 'pre-wrap', fontFamily: 'monospace' }
+            };
+
+            // === COMPONENT RENDERING (JSX) ===
+            return (
+                <div style={styles.dashboard}>
+                    <div style={styles.header}>CommodAI-Tee: Mining Analysis Dashboard</div>
+
+                    <div style={styles.main}>
+                        {/* === MAIN COLUMN (PORTFOLIO, COMPLIANCE, CHAT) === */}
+                        <div style={styles.leftColumn}>
+                            {/* --- Portfolio Widget --- */}
+                            <div style={styles.widget}>
+                                <div style={styles.widgetTitle}>Portfolio Monitor (88 Companies)</div>
+                                <table style={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th style={styles.th}>Ticker</th>
+                                            <th style={styles.th}>Company Name</th>
+                                            <th style={styles.th}>Region</th>
+                                            <th style={styles.th}>Price</th>
+                                            <th style={styles.th}>Change</th>
+                                            <th style={styles.th}>Compliance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {portfolio && portfolio.map(stock => (
+                                            <tr key={stock.id}>
+                                                <td style={styles.td}>{stock.ticker}</td>
+                                                <td style={styles.td}>{stock.name}</td>
+                                                <td style={styles.td}>{stock.region}</td>
+                                                <td style={styles.td}>{stock.price}</td>
+                                                <td style={{ ...styles.td, color: stock.change.startsWith('+') ? 'green' : 'red' }}>{stock.change}</td>
+                                                <td style={{ ...styles.td, color: stock.compliance === 'WARN' ? 'orange' : 'green' }}>{stock.compliance}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* --- ESG Compliance Widget --- */}
+                            <div style={styles.widget}>
+                                <div style={styles.widgetTitle}>ESG Compliance Dashboard (NPDES, SWPPP, TRI)</div>
+                                {complianceData && complianceData.map(item => (
+                                    <div key={item.id} style={{ ...styles.listItem, color: item.status === 'ALERT' ? 'red' : (item.status === 'WARN' ? 'orange' : 'black') }}>
+                                        <strong>{item.status}:</strong> {item.company} - {item.type} ({item.details})
+                                        {item.deadline !== 'N/A' && <span> | <strong>Deadline: {item.deadline}</strong></span>}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* --- Chat Interface Widget --- */}
+                            <div style={styles.widget}>
+                                <div style={styles.widgetTitle}>Query CommodAI-Tee</div>
+                                <form onSubmit={handleQuerySubmit} style={styles.queryBox}>
+                                    <input
+                                        type="text"
+                                        style={styles.queryInput}
+                                        placeholder="e.g., 'Analyze AISC trends for US gold producers' or 'NPDES status for portfolio'"
+                                        value={query}
+                                        onChange={(e) => setQuery(e.target.value)}
+                                    />
+                                    <button type="submit" style={styles.queryButton}>Analyze</button>
+                                </form>
+                                {chatResponse && (
+                                    <div style={styles.queryResponse}>
+                                        {chatResponse}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* === RIGHT COLUMN (MARKETS, NEWS, EVENTS) === */}
+                        <div style={styles.rightColumn}>
+                            {/* --- Market Watch Widget --- */}
+                            <div style={styles.widget}>
+                                <div style={styles.widgetTitle}>Market Watch (API Triggers)</div>
+                                {marketData && Object.entries(marketData).map(([key, value]) => (
+                                    <div key={key} style={{ ...styles.listItem, color: value.alert.includes('high') ? 'red' : 'black' }}>
+                                        <strong style={{textTransform: 'capitalize'}}>{key}:</strong> ${value.price.toLocaleString()}
+                                        <span style={{ color: value.change.startsWith('+') ? 'green' : 'red', marginLeft: '10px' }}>({value.change})</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* --- News Feed Widget --- */}
+                            <div style={styles.widget}>
+                                <div style={styles.widgetTitle}>Breaking News & Intel</div>
+                                {newsFeed && newsFeed.map(item => (
+                                    <div key={item.id} style={styles.listItem}>{item.headline}</div>
+                                ))}
+                            </div>
+
+                            {/* --- Calendar Widget --- */}
+                            <div style={styles.widget}>
+                                <div style={styles.widgetTitle}>Industry Calendar</div>
+                                {eventCalendar && eventCalendar.map(item => (
+                                    <div key={item.id} style={styles.listItem}>
+                                        <strong>{item.name}</strong> ({item.date}) - {item.location}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<CommadAiTeeDashboard />);
+    </script>
+</body>
+</html>
